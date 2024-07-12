@@ -29,6 +29,9 @@ class AppViewModel : ViewModel() {
             CarOwner("Coci ", "VW Polo", "191262"),
             CarOwner("Randy", "", "592006"),
             CarOwner("Robi", "Toyota", "536428"),
+            CarOwner("Angela", "", "69704"),// BS
+            CarOwner("Stefan", "", "935570"),
+            CarOwner("Jesse", "", "261864"),
         )
     }
 
@@ -48,7 +51,8 @@ class AppViewModel : ViewModel() {
                 }
             }
             if (response.status.value in 200..299) {
-                _errorMessage.value = "${ownerList.value[selected.value!!].name} erfolgreich registriert!"
+                _errorMessage.value =
+                    "${ownerList.value[selected.value!!].name} erfolgreich registriert!"
             } else {
                 _errorMessage.value = "Registrierung fehlgeschlagen!"
             }
