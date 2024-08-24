@@ -22,16 +22,16 @@ class AppViewModel : ViewModel() {
 
     init {
         _ownerList.value = listOf(
-            CarOwner("Roli", "VW Golf", "677929"),
-            CarOwner("Andy", "Ford", "289090"),
-            CarOwner("Jessy", "Mazda", "782035"),
-            CarOwner("Mami", "Audi", "460104"),
-            CarOwner("Coci ", "VW Polo", "191262"),
-            CarOwner("Randy", "", "592006"),
-            CarOwner("Robi", "Toyota", "536428"),
-            CarOwner("Angela", "", "69704"),// BS
-            CarOwner("Stefan", "", "935570"),
-            CarOwner("Jesse", "", "261864"),
+            CarOwner("Roli", "VW Golf", "677929", "ZH"),
+            CarOwner("Andy", "Ford", "289090", "ZH"),
+            CarOwner("Jessy", "Mazda", "782035", "ZH"),
+            CarOwner("Mami", "Audi", "460104", "ZH"),
+            CarOwner("Coci ", "VW Polo", "191262", "ZH"),
+            CarOwner("Randy", "Hyundai", "592006", "ZH"),
+            CarOwner("Robi", "Toyota", "536428", "ZH"),
+            CarOwner("Angela", "", "69704", "BS"),// BS
+            CarOwner("Stefan", "", "935570", "ZH"),
+            CarOwner("Jesse", "", "261864", "ZH"),
         )
     }
 
@@ -45,14 +45,18 @@ class AppViewModel : ViewModel() {
         if (selected.value == null) return
         val client = HttpClient()
         try {
-            val response = client.get("http://192.168.1.221:8080/parkreservation") {
+            var host = "http://raspberrypi-1.tail3e513.ts.net:8080/parkreservation"
+            var localhost = "http://192.168.1.221:8080/parkreservation"
+
+            val response = client.get(host) {
                 url {
                     parameters.append("plateNumber", ownerList.value[selected.value!!].plateNumber)
+                    parameters.append("canton", ownerList.value[selected.value!!].canton)
                 }
             }
             if (response.status.value in 200..299) {
                 _errorMessage.value =
-                    "${ownerList.value[selected.value!!].name} erfolgreich registriert!"
+                    "${ownerList.value[selected.value!!].owner} erfolgreich registriert!"
             } else {
                 _errorMessage.value = "Registrierung fehlgeschlagen!"
             }
@@ -61,9 +65,8 @@ class AppViewModel : ViewModel() {
         }
 
         _loading.value = false
-
-
     }
+
 }
 
-class CarOwner(val name: String, val carType: String, val plateNumber: String) {}
+class CarOwner(val owner: String, val carType: String, val plateNumber: String, val canton: String) {}

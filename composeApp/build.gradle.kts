@@ -80,14 +80,13 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.ktor.client.cio)
         }
 
         wasmJsMain.dependencies {
-            implementation("io.ktor:ktor-client-core:2.3.3-wasm0")
-            implementation("io.ktor:ktor-client-serialization:2.3.3-wasm0")
-
+            implementation("io.ktor:ktor-client-core:3.0.0-wasm2")
+            implementation("io.ktor:ktor-client-serialization:3.0.0-wasm2")
         }
-
 
     }
 }
@@ -140,3 +139,4 @@ compose.desktop {
         }
     }
 }
+task("testClasses")

@@ -29,6 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+
 @Composable
 @Preview
 fun App() {
@@ -36,7 +37,7 @@ fun App() {
         val viewModel: AppViewModel = viewModel { AppViewModel() }
 
         Scaffold(
-            modifier = Modifier.background(Color(0xf0f2f1)).padding(20.dp),
+            modifier = Modifier.background(Color.White).padding(20.dp),
             bottomBar = {
                 ReservationBottomBar(
                     viewModel.resultMessage.collectAsState().value,
@@ -50,7 +51,7 @@ fun App() {
             }
         ) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
-                LazyVerticalGrid(
+                LazyVerticalGrid (
                     columns = GridCells.Adaptive(minSize = 120.dp)
                 ) {
                     val ownerList = viewModel.ownerList.value
@@ -74,16 +75,23 @@ private fun ReservationBottomBar(
     selected: Int?,
     confirmReservation: () -> Unit
 ) {
-    Column {
+    Column() {
         Text(
             modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
             text = resultMessage,
             maxLines = 1,
         )
+
+        var buttonColor = if (getPlatform() == "Android") {
+            Color(0xFFcae3d5) //Green
+        } else{
+            Color(0xFFfadef9) //
+        }
+
         Button(
             modifier = Modifier.fillMaxWidth().height(50.dp),
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFFcae3d5),
+                backgroundColor = buttonColor,
                 contentColor = Color.Black
             ),
             onClick = {
@@ -100,11 +108,13 @@ private fun ReservationBottomBar(
                     Text("Parking bestätigen")
                 }
             })
-    }
+
+
+}
 }
 
 @Composable
-fun CarOwnerItem(carOwner: CarOwner, selected: Boolean, selectItem: () -> Unit) {
+fun CarOwnerItem(car: CarOwner, selected: Boolean, selectItem: () -> Unit) {
     Card(
         backgroundColor = if (selected) Color(0xFFcae3d5) else Color.White,
         modifier = Modifier
@@ -115,21 +125,21 @@ fun CarOwnerItem(carOwner: CarOwner, selected: Boolean, selectItem: () -> Unit) 
     ) {
         Column(modifier = Modifier.padding(all = 16.dp)) {
             Text(
-                text = carOwner.name,
+                text = car.owner,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
             )
             Text(
-                text = carOwner.carType,
+                text = car.carType,
                 fontSize = 14.sp,
                 color = Color(0xFF000000),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
-                text = "ZH-${carOwner.plateNumber}",
+                text = "${car.canton}-${car.plateNumber}",
                 fontSize = 14.sp,
                 color = Color(0xFF000000),
                 textAlign = TextAlign.Center,
